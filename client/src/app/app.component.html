@@ -1,0 +1,38 @@
+<mat-sidenav-container fullscreen>
+  <mat-sidenav #sidenav (click)="sidenav.toggle()">
+    <mat-nav-list>
+      <a mat-list-item routerLink="users">
+        <mat-icon mat-list-icon>person</mat-icon>
+        <span mat-line>Users</span>
+      </a>
+      <a mat-list-item routerLink="listOfAct">
+        <mat-icon mat-list-icon>code</mat-icon>
+        <span mat-line>List of Activities</span>
+      </a>
+       <a mat-list-item routerLink="answerCall">
+        <mat-icon mat-list-icon>code</mat-icon>
+        <span mat-line>Answer Call</span>
+      </a>
+      <!--<a mat-list-item href="https://medium.com/dailyjs/real-time-apps-with-typescript-integrating-web-sockets-node-angular-e2b57cbd1ec1" target="_blank">
+        <mat-icon mat-list-icon>web</mat-icon>
+        <span mat-line>Blog Post</span>
+      </a>-->
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <div>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+      <span>Mitel</span>
+      <button #logout mat-icon-button (click)="Logout()"  *ngIf="showLogout()" style="position: absolute; right: 10px">
+        <mat-icon>power_settings_new</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <div class="app-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</mat-sidenav-container>

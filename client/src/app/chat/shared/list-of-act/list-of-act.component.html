@@ -1,0 +1,29 @@
+<!--<button mat-fab (click)="onClickUserInfo()">
+  <mat-icon>person</mat-icon>
+</button>-->
+<div class="chat-container" *ngIf="activitiesExist">
+  <mat-card class="main-card">
+    <mat-list class="chat-list">
+      
+      <a mat-list-item *ngFor="let call of calls" [ngClass]="chat-list-item"  (click)="selection($event)">
+            
+        <img mat-list-avatar  [src]="call.user.avatar">
+         <mat-icon matListIcon  class="icon">call</mat-icon>
+        <h3 mat-line class="name">          
+          <b>{{call.user.name}}</b>        
+        </h3>   
+      </a>                 
+    </mat-list> 
+    <mat-list class="chat-list">
+      
+      <a mat-list-item *ngFor="let chat of chats" [ngClass]="chat-list-item"  (click)="selection($event)">
+            
+        <img mat-list-avatar  [src]="chat.user.avatar">
+         <mat-icon matListIcon  class="icon">chat</mat-icon>
+        <h3 mat-line class="name">          
+          <b>{{chat.user.name}}</b>        
+        </h3>   
+      </a>                 
+    </mat-list>   
+  </mat-card>
+</div>

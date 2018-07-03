@@ -1,0 +1,29 @@
+a{
+    text-decoration: none
+}
+.mat-list{
+     cursor  : pointer;
+    /* width:30vw;*/
+    
+}
+
+.chat-container {
+    position: fixed;   
+  width: 100vw;
+    height:100vw;
+}
+
+.mat-card
+{
+    
+    justify-content: center;
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+}
+
+
+.mat-list-item{
+
+    align-self:  center
+}
