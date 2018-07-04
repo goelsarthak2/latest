@@ -3,6 +3,8 @@ import { Call }  from '../model/call'
 import {Chat}  from '../model/chat'
 import {User}  from '../model/user'
 import {FormData} from '../model/data'
+import { Observable } from 'rxjs';
+import { Subject } from 'rxjs/Subject';
 
 declare var getUser: any;
 declare var setUser: any;
@@ -17,7 +19,19 @@ export class DataService {
         name : ""
     }
     private formData: FormData = new FormData();
-    
+    private subject = new Subject<any>();
+    sendData(message: string) {
+        this.subject.next(message);
+    }
+ 
+    clearData() {
+        this.subject.next();
+    }
+ 
+    getData(): Observable<any> {
+        return this.subject.asObservable();
+    }
+
     getCalls(): Call[] {            
         return this.formData.calls;
     }

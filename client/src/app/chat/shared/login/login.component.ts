@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService } from '../services/data.service'
 
@@ -12,7 +12,6 @@ declare var connectStatus: any;
 export class LoginComponent implements OnInit {
   user : string
   pass : string
-  
   constructor(private _router: Router, private dataService : DataService) { }
 
   ngOnInit() {  
@@ -30,6 +29,8 @@ export class LoginComponent implements OnInit {
       this.dataService.setUser({
           name: this.user.trim()+"@trials.com"
       })
+      debugger;
+      this.dataService.sendData('Message from button Click on Child One');
       this._router.navigate(["/users"]);  
   }  
 

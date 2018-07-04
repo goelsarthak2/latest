@@ -20,6 +20,7 @@ export class CallComponent implements OnInit {
    user: User= {
     name : ''
   }
+  
   constructor(   private _activatedRoute: ActivatedRoute, private _router: Router, 
   private dataService: DataService
   ) { }
