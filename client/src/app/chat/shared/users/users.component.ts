@@ -1,11 +1,13 @@
-import { Component, OnInit, ViewChildren, ViewChild,AfterContentInit, AfterViewInit, QueryList, ElementRef, ContentChild } from '@angular/core';
+import { Component, OnInit, ViewChildren, ViewChild,
+  AfterContentInit, AfterViewInit, QueryList, ElementRef, ContentChild,  NgZone } from '@angular/core';
 import { MatDialog, MatDialogRef, MatList, MatListItem, MatToolbar } from '@angular/material';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute, NavigationEnd} from '@angular/router';
 import { Action } from '../model/action';
 import { Event } from '../model/event';
 import { Message } from '../model/message';
 import { User } from '../model/user';
 import { DataService } from '../services/data.service'
+import {Call} from '../model/call'
 
 const AVATAR_URL = 'https://api.adorable.io/avatars/285';
 
@@ -19,9 +21,11 @@ export class UsersComponent implements OnInit {
 
   action = Action;
   users: User[] = [];
+  call: Call;
   messages: Message[] = [];
   messageContent: string;
   ioConnection: any; 
+  navigationSubscription: any;
   // dialogRef: MatDialogRef<DialogUserComponent> | null;
   defaultDialogUserParams: any = {
     disableClose: true,
@@ -41,29 +45,74 @@ export class UsersComponent implements OnInit {
  /* constructor(private socketService: SocketService,
     public dialog: MatDialog) { }
 */
-constructor(private _router: Router, private dataService : DataService) {
+constructor(private dataService : DataService, private route:ActivatedRoute, private router: Router, private _ngZone: NgZone
+) { 
+  window['UserComponent'] = {component: this, zone: _ngZone};
+ /*  this.route.params.subscribe(val => {
+    debugger;
+    // put the code from `ngOnInit` here
+  }); */
+  this.navigationSubscription = this.router.events.subscribe((e: any) => {    
+    // If it is a NavigationEnd event re-initalise the component
+    if (e instanceof NavigationEnd) {
+      this.initialiseInvites();
+    }
+  });
+
+}
+
+navigationReceiveCall(name: string, type: string)
+{
+  debugger;
+ var user = {
+    name: name,
+  }
+  this.call = {
+    user : user
+  }
+  this.call.type =type;
+  this.dataService.setCall(this.call)
+  this.router.navigate(["/answerCall"]);
+
+}
+
+navigationEndCall(name: string, type: string)
+{
+  debugger;
+  this.dataService.clearCallData(name);
+  this.router.navigate(["/users"]);
+
+}
+
+initialiseInvites() {
+  // Set default values and re-fetch any data you need.
+  this.getUsers();
+}
+
+ngOnDestroy() {
+  // avoid memory leaks here by cleaning up after ourselves. If we  
+  // don't then we will continue to run our initialiseInvites()   
+  // method on every navigationEnd event.
+  if (this.navigationSubscription) {  
+     this.navigationSubscription.unsubscribe();
+  }
 }
  
   ngOnInit(): void {
-debugger;
+    debugger;
     this.getUsers();
-
+    
     // Using timeout due to https://github.com/angular/angular/issues/14748
    /* setTimeout(() => {
       this.openUserPopup(this.defaultDialogUserParams);
     }, 0);*/
-  }
-
-  ngAfterContentInit(){
-
-    debugger;
-  }
-  getUsers(){    
+  }  
+  getUsers(){   
+    this.dataService.getUsers(); 
       this.users = this.dataService.getFormData().users;
   }
   
-  ngAfterViewInit(): void {
-    debugger;
+  ngAfterViewInit(): void {    
     // subscribing to any changes in the list of items / messages
    /*  this.matListItems.changes.subscribe(elements => {
       this.scrollToBottom(); 

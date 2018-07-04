@@ -7,7 +7,6 @@ export class AuthService {
   constructor(private dataService : DataService) {}
   // ...
   public isAuthenticated(): boolean {
-    debugger;
     const status = this.dataService.checkedStatus();    
     // Check whether the token is expired and return
     // true or false

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule, CanActivate } from '@angular/router';
+import { Routes, RouterModule, CanActivate, RouteReuseStrategy } from '@angular/router';
 import { ChatComponent } from './chat/chat.component';
 import { UsersComponent } from './chat/shared/users/users.component';
 import { CallComponent } from './chat/shared/call/call.component';
@@ -10,8 +10,10 @@ import {
 } from './chat/shared/services/validation-auth.service';
 import { AuthService } from './chat/shared/services/validation.service';
 
+import {CustomRouteReuseStrategy } from './chat/shared/services/route-reuse.strategy'
 const routes: Routes = [  
-   { path: 'users', component: UsersComponent,  canActivate: [AuthGuard]  },   
+   { path: 'users', component: UsersComponent,  canActivate: [AuthGuard],runGuardsAndResolvers: 
+  'always'   },   
    { path: 'call', component: CallComponent,  canActivate: [AuthGuard] },
    { path: 'chat', component: ChatComponent,  canActivate: [AuthGuard] },
   { path: 'call/:name', component: CallComponent,  canActivate: [AuthGuard] },
@@ -26,8 +28,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes,{onSameUrlNavigation: 'reload'})],
   exports: [RouterModule],
-  providers: [AuthGuard, AuthService]
+  providers: [AuthGuard, AuthService,  
+   /*  {
+    provide: RouteReuseStrategy,
+    useClass: CustomRouteReuseStrategy
+  } */
+]
 })
 export class AppRoutingModule { }

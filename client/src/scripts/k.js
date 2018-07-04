@@ -37,13 +37,17 @@ let config = {
     }
 }
 
-let getUser = function()
+let getUser = function(name)
 {    
     debugger;
     let storedNames = '';
     if(localStorage.getItem("storage-event-test") != '')
     {
-        storedNames = JSON.parse(localStorage.getItem("storage-event-test"));    
+        storedNames = JSON.parse(localStorage.getItem("storage-event-test"));   
+        var index = storedNames.indexOf(name);
+        if (index > -1) {
+            storedNames.splice(index, 1);
+        } 
     }   
     return storedNames;
 }
@@ -51,16 +55,21 @@ let getUser = function()
 let setUser = function(name)
 {
     debugger;
-    let names;
+    let storedNames;
     if(localStorage.getItem("storage-event-test") == '')
-    names  = [];
+    storedNames  = [];
     else
-    names = JSON.parse(localStorage.getItem("storage-event-test")); 
+    storedNames = JSON.parse(localStorage.getItem("storage-event-test")); 
+    var index = storedNames.indexOf(name);
+        if (index > -1) {            
+        } 
+        else
+        storedNames[storedNames.length]= name;
     /* if(names.length != 0)     
     names[names.length - 1] =name;
     else  */
-    names[names.length]= name;
-    localStorage.setItem("storage-event-test", JSON.stringify(names));
+    //names[names.length]= name;
+    localStorage.setItem("storage-event-test", JSON.stringify(storedNames));
  
 }
 
@@ -83,9 +92,11 @@ let removeUser = function(name)
 
 let kandy = createKandy( config );
 
- kandy.on('auth:change', function() {
-    debugger;   
-    connectStatus = kandy.getConnection().isConnected;       
+ kandy.on('auth:change', function() {     
+    connectStatus = kandy.getConnection().isConnected;  
+    window['LoginComponent'].zone.run(() => {
+        window['LoginComponent'].component.loginFromOutside(connectStatus); 
+      });     
 }); 
 
 kandy.on('auth:error', function(params) {
@@ -151,26 +162,29 @@ var makeCall = function (name) {
   //  let callee = document.getElementById('callee').value;
   let callee = name;
    // let withVideo = document.getElementById('make-with-video').checked;
-
+   let withVideo = true;
     // Gather media containers to be used for the call.
     let remoteContainer = document.getElementById('vremote');
     let localContainer = document.getElementById('vlocal');
 
     logmsg('Making call to ' + callee);
+    
     callId = kandy.call.make(callee, {
       //  sendInitialVideo: withVideo,
-        sendInitialVideo: true,
+        sendInitialVideo: withVideo,
         remoteVideoContainer: remoteContainer,
         localVideoContainer: localContainer,
         normalizeAddress: true
     });
+    
 }
 
 // Answer an incoming call.
-function answerCall() {
+let answerCall =function() {
+    debugger;
     // Gather call options.
-    let withVideo = document.getElementById('answer-with-video').checked;
-
+   // let withVideo = document.getElementById('answer-with-video').checked;
+   let withVideo = true;
     // Gather media containers to be used for the call.
     let remoteContainer = document.getElementById('vremote');
     let localContainer = document.getElementById('vlocal');
@@ -187,21 +201,26 @@ function answerCall() {
 }
 
 // Reject an incoming call.
-function rejectCall() {
+let rejectCall = function () {
     // Retrieve call state.
     let call = kandy.call.getById(callId);
     logmsg('Rejecting call from ' + call.from);
 
     kandy.call.reject(callId);
+    window['UserComponent'].zone.run(() => {
+        window['UserComponent'].component.navigationEndCall(call.from); 
+      });
 }
 
 // End an ongoing call.
-function endCall() {
+var endCall= function () {
     // Retrieve call state.
     let call = kandy.call.getById(callId);
     logmsg('Ending call with ' + call.from);
-
     kandy.call.end(callId);
+    window['UserComponent'].zone.run(() => {
+        window['UserComponent'].component.navigationEndCall(call.from); 
+      });
 }
 
 // Set listener for successful call starts.
@@ -221,20 +240,41 @@ kandy.on('media:error', function(params) {
 
 // Set listener for changes in a call's state.
 kandy.on('call:stateChange', function(params) {
+    debugger;
+    let call = kandy.call.getById(callId);
     logmsg('Call state changed to: ' + params.state);
-
+    let withVideo = true;
     // If the call ended, stop tracking the callId.
     if(params.state === 'ENDED') {
-        callId = null;
+        /* callId = null;
+        window['UserComponent'].zone.run(() => {
+            window['UserComponent'].component.navigationEndCall(call.from); 
+          }); */
+          endCall();
+    }  
+    else if (params.state == "RINGING"|| params.state == "IN_CALL")
+    {
+     if( withVideo == true)
+    {
+        document.getElementsByClassName('call-container')[0].style.position = "relative";
+       
     }
+    else
+    {
+        document.getElementsByClassName('call-container')[0].style.position = "fixed";
+    }   
+}
 });
 
 // Set listener for incoming calls.
 kandy.on('call:receive', function(params) {
     // Keep track of the callId.
     callId = params.callId;
-
+debugger;
     // Retrieve call information.
     call = kandy.call.getById(params.callId);
     logmsg('Received incoming call from ' + call.from);
+    window['UserComponent'].zone.run(() => {
+        window['UserComponent'].component.navigationReceiveCall(call.from, "receiving"); 
+      });
 });

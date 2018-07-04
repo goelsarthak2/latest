@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { DataService } from '../services/data.service';
@@ -6,6 +6,10 @@ import { Call } from '../model/call';
 import { User } from '../model/user';
 
 declare var makeCall : any 
+declare var answerCall : any 
+declare var rejectCall : any 
+declare var endCall : any 
+
 @Component({
   selector: 'tcc-call',
   templateUrl: './call.component.html',
@@ -22,15 +26,17 @@ export class CallComponent implements OnInit {
   }
   
   constructor(   private _activatedRoute: ActivatedRoute, private _router: Router, 
-  private dataService: DataService
-  ) { }
+  private dataService: DataService, private _ngZone: NgZone
+  ) { 
+    //window['anComponent'] = {component: this, zone: _ngZone};
+  }
 
-
+ 
   ngOnInit() {   
     debugger;
      this.call = this.dataService.getCall();
      this.name = this._activatedRoute.snapshot.params['name'];
-     makeCall(this.name);
+     
      this.fromListOfAct = this._activatedRoute.snapshot.params['fromListOfAct'];
       if(this.name == undefined && this._activatedRoute.snapshot.url[0].path != "answerCall")
      {
@@ -56,6 +62,7 @@ export class CallComponent implements OnInit {
           {
               this.dataService.setCall(this.call); 
           }   
+          makeCall(this.name);
      }    
     
    
@@ -64,5 +71,17 @@ export class CallComponent implements OnInit {
       return this.answerCallExist==true || this.type==true;
 
      }
+  rejectCall(){
+    debugger;
+    rejectCall();
+  }
+  acceptCall(){
+    this.type= true;
+    answerCall();
+  }
+  endCall(){
+    this.type= true;
+    endCall();
+  }
 
 }

@@ -20,8 +20,8 @@ export class DataService {
     }
     private formData: FormData = new FormData();
     private subject = new Subject<any>();
-    sendData(message: string) {
-        this.subject.next(message);
+    sendData(status: boolean) {
+        this.subject.next(status);
     }
  
     clearData() {
@@ -42,7 +42,8 @@ export class DataService {
             avatar: data.user.avatar
         }    
        var call :Call ={
-           user: user
+           user: user,
+           type: data.type
        }
         this.formData.calls.push(call);
     }
@@ -81,11 +82,12 @@ export class DataService {
     }
     setUser(user: User)  {
     debugger;
+    this.users = [];
     this.user.name = user.name;     
     this.formData.loggedIn = true;
     const randomId = this.getRandomId();
-    let name = getUser();   
     setUser(user.name);
+    let name = getUser(user.name);       
     if(name != '')
     {
     name.forEach(element => {
@@ -97,6 +99,35 @@ export class DataService {
     });  
     }
     this.formData.users = this.users;   
+  }
+  getUsers(){
+      debugger;
+    this.users = [];
+    let user = this.user;
+    const randomId = this.getRandomId();
+    let name = getUser(user.name);       
+    if(name != '')
+    {
+    name.forEach(element => {
+        this.users.push({
+            id: randomId,
+            avatar: `${AVATAR_URL}/${randomId}.png`,
+            name: element  }
+          ) 
+    });  
+    }
+    this.formData.users = this.users;  
+
+  }
+
+  clearCallData(name: string){
+    
+    let call: Call = this.formData.calls.filter( x=>x.user.name == name)[0];
+    const index: number = this.formData.calls.indexOf(call);
+    if (index !== -1) {
+        this.formData.calls.splice(index, 1);
+    }   
+    
   }
   
 
