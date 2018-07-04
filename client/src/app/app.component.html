@@ -26,9 +26,11 @@
       <mat-icon>menu</mat-icon>
     </button>
       <span>Mitel</span>
-      <button #logout mat-icon-button (click)="Logout()"  *ngIf="showLogout()" style="position: absolute; right: 10px">
+    
+      <button #logout mat-icon-button (click)="Logout()" *ngIf = "showLogout" style="position: absolute; right: 10px">
         <mat-icon>power_settings_new</mat-icon>
       </button>
+   
     </mat-toolbar>
 
     <div class="app-content">

@@ -4,14 +4,20 @@ import {Chat}  from '../model/chat'
 import {User}  from '../model/user'
 import {FormData} from '../model/data'
 
+declare var getUser: any;
+declare var setUser: any;
+declare var removeUser: any;
+
 const AVATAR_URL = 'https://api.adorable.io/avatars/285';
 
 @Injectable()
 export class DataService {
     users: User[]= []
-  
+    user : User= {
+        name : ""
+    }
     private formData: FormData = new FormData();
- 
+    
     getCalls(): Call[] {            
         return this.formData.calls;
     }
@@ -60,14 +66,30 @@ export class DataService {
         return this.formData.chat;
     }
     setUser(user: User)  {
+    debugger;
+    this.user.name = user.name;     
     this.formData.loggedIn = true;
     const randomId = this.getRandomId();
-    this.users.push({
-      id: randomId,
-      avatar: `${AVATAR_URL}/${randomId}.png`,
-      name: user.name    }
-    )
-    this.formData.users = this.users;
+    let name = getUser();   
+    setUser(user.name);
+    if(name != '')
+    {
+    name.forEach(element => {
+        this.users.push({
+            id: randomId,
+            avatar: `${AVATAR_URL}/${randomId}.png`,
+            name: element  }
+          ) 
+    });  
+    }
+    this.formData.users = this.users;   
+  }
+  
+
+  resetFormData(){
+      removeUser(this.user.name);
+      this.formData =  new FormData();
+      this.users = [];
   }
    private getRandomId(): number {
     return Math.floor(Math.random() * (1000000)) + 1;

@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChildren, ViewChild, AfterViewInit, QueryList, ElementRef, ContentChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MatList, MatListItem } from '@angular/material';
+import { Component, OnInit, ViewChildren, ViewChild,AfterContentInit, AfterViewInit, QueryList, ElementRef, ContentChild } from '@angular/core';
+import { MatDialog, MatDialogRef, MatList, MatListItem, MatToolbar } from '@angular/material';
 import {Router} from '@angular/router';
 import { Action } from '../model/action';
 import { Event } from '../model/event';
@@ -21,8 +21,8 @@ export class UsersComponent implements OnInit {
   users: User[] = [];
   messages: Message[] = [];
   messageContent: string;
-  ioConnection: any;
-  //dialogRef: MatDialogRef<DialogUserComponent> | null;
+  ioConnection: any; 
+  // dialogRef: MatDialogRef<DialogUserComponent> | null;
   defaultDialogUserParams: any = {
     disableClose: true,
     data: {
@@ -36,8 +36,8 @@ export class UsersComponent implements OnInit {
 
   // getting a reference to the items/messages within the list
   @ViewChildren(MatListItem, { read: ElementRef }) matListItems: QueryList<MatListItem>;
+  
  
-
  /* constructor(private socketService: SocketService,
     public dialog: MatDialog) { }
 */
@@ -45,7 +45,7 @@ constructor(private _router: Router, private dataService : DataService) {
 }
  
   ngOnInit(): void {
-
+debugger;
     this.getUsers();
 
     // Using timeout due to https://github.com/angular/angular/issues/14748
@@ -53,16 +53,22 @@ constructor(private _router: Router, private dataService : DataService) {
       this.openUserPopup(this.defaultDialogUserParams);
     }, 0);*/
   }
+
+  ngAfterContentInit(){
+
+    debugger;
+  }
   getUsers(){    
       this.users = this.dataService.getFormData().users;
   }
   
-  /*ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
+    debugger;
     // subscribing to any changes in the list of items / messages
-    this.matListItems.changes.subscribe(elements => {
-      this.scrollToBottom();
-    });
-  }*/
+   /*  this.matListItems.changes.subscribe(elements => {
+      this.scrollToBottom(); 
+    });*/
+  }
 
   // auto-scroll fix: inspired by this stack overflow post
   // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style

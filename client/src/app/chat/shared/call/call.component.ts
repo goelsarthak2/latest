@@ -5,6 +5,7 @@ import { DataService } from '../services/data.service';
 import { Call } from '../model/call';
 import { User } from '../model/user';
 
+declare var makeCall : any 
 @Component({
   selector: 'tcc-call',
   templateUrl: './call.component.html',
@@ -28,6 +29,7 @@ export class CallComponent implements OnInit {
     debugger;
      this.call = this.dataService.getCall();
      this.name = this._activatedRoute.snapshot.params['name'];
+     makeCall(this.name);
      this.fromListOfAct = this._activatedRoute.snapshot.params['fromListOfAct'];
       if(this.name == undefined && this._activatedRoute.snapshot.url[0].path != "answerCall")
      {

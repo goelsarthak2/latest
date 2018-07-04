@@ -37,6 +37,50 @@ let config = {
     }
 }
 
+let getUser = function()
+{    
+    debugger;
+    let storedNames = '';
+    if(localStorage.getItem("storage-event-test") != '')
+    {
+        storedNames = JSON.parse(localStorage.getItem("storage-event-test"));    
+    }   
+    return storedNames;
+}
+
+let setUser = function(name)
+{
+    debugger;
+    let names;
+    if(localStorage.getItem("storage-event-test") == '')
+    names  = [];
+    else
+    names = JSON.parse(localStorage.getItem("storage-event-test")); 
+    /* if(names.length != 0)     
+    names[names.length - 1] =name;
+    else  */
+    names[names.length]= name;
+    localStorage.setItem("storage-event-test", JSON.stringify(names));
+ 
+}
+
+let clearStorage = function()
+{
+
+    localStorage.setItem("storage-event-test", '');
+
+}
+
+let removeUser = function(name)
+{
+    let storedNames = JSON.parse(localStorage.getItem("storage-event-test"));   
+    var index = storedNames.indexOf(name);
+    if (index > -1) {
+        storedNames.splice(index, 1);
+    }
+    localStorage.setItem("storage-event-test", JSON.stringify(storedNames));
+}
+
 let kandy = createKandy( config );
 
  kandy.on('auth:change', function() {
@@ -48,9 +92,9 @@ kandy.on('auth:error', function(params) {
   logmsg('Connect error: ' + params.error.message + ' (' + params.error.code + ')');
 });
 
-function logmsg(message) {
-    debugger;
-  document.getElementById('msg').innerHTML += '<div>' + message + '</div>';
+function logmsg(message) {   
+  //document.getElementById('msg').innerHTML += '<div>' + message + '</div>';
+  console.log(message);
 }
 
 
@@ -101,10 +145,12 @@ function renderLatestMessage(convo) {
 let callId;
 
 // Get user input and make a call to the callee.
-function makeCall() {
+var makeCall = function (name) {
+    debugger
     // Gather call options.
-    let callee = document.getElementById('callee').value;
-    let withVideo = document.getElementById('make-with-video').checked;
+  //  let callee = document.getElementById('callee').value;
+  let callee = name;
+   // let withVideo = document.getElementById('make-with-video').checked;
 
     // Gather media containers to be used for the call.
     let remoteContainer = document.getElementById('vremote');
@@ -112,7 +158,8 @@ function makeCall() {
 
     logmsg('Making call to ' + callee);
     callId = kandy.call.make(callee, {
-        sendInitialVideo: withVideo,
+      //  sendInitialVideo: withVideo,
+        sendInitialVideo: true,
         remoteVideoContainer: remoteContainer,
         localVideoContainer: localContainer,
         normalizeAddress: true

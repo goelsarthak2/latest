@@ -4,7 +4,7 @@ import { DataService } from '../services/data.service'
 
 declare var kandy: any;
 declare var connectStatus: any;
-declare var abc: any;
+
 @Component({
   selector: 'tcc-login',
   templateUrl: './login.component.html'
