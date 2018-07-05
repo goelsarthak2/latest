@@ -5,4 +5,9 @@ export class Call {
         name: '',
         avatar: '',      
     };
+    type?: string
+}
+
+export enum Type{
+     CALLING,RECEIVING
 }

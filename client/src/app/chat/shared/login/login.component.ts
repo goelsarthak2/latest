@@ -1,10 +1,9 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit,NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService } from '../services/data.service'
 
 declare var kandy: any;
 declare var connectStatus: any;
-
 @Component({
   selector: 'tcc-login',
   templateUrl: './login.component.html'
@@ -12,33 +11,62 @@ declare var connectStatus: any;
 export class LoginComponent implements OnInit {
   user : string
   pass : string
-  constructor(private _router: Router, private dataService : DataService) { }
+  constructor(private _router: Router, private dataService : DataService, private _ngZone: NgZone) {
+    debugger;
+    window['LoginComponent'] = {component: this, zone: _ngZone};
+   }
 
-  ngOnInit() {  
-    
+   /* runThisFunctionFromOutside()
+   {
+ 
+     debugger; 
+   } */
+
+  ngOnInit() {      
   }
-  async login() {
-    debugger; 
+
+   login() {  
+     debugger;  
       kandy.connect({
       username: this.user.trim()+"@trials.com",
       password: this.pass
     })   
-  await this.delay(3000);
-  if(connectStatus == true)     
+  //await this.delay(3000);
+ /*  if(connectStatus == true)     
   {
       this.dataService.setUser({
           name: this.user.trim()+"@trials.com"
       })
       debugger;
-      this.dataService.sendData('Message from button Click on Child One');
+      this.dataService.sendData(true);
       this._router.navigate(["/users"]);  
   }  
+  else
+  {
+  this.dataService.sendData(false);
+  } */
 
 }
-
+loginFromOutside(connectStatus : boolean)
+{
+ debugger;
+  if(connectStatus == true)     
+  {
+    this.dataService.setUser({
+    name: this.user.trim()+"@trials.com"
+    })      
+    this.dataService.sendData(true);
+    this._router.navigate(["/users"]);  
+  }  
+  else
+  {
+    this.dataService.sendData(false);
+  }
+}
+/* 
  delay(ms: number) {
   return new Promise( resolve => setTimeout(resolve, ms) );
-}
+} */
 
 
 

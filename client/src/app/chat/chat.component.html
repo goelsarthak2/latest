@@ -24,12 +24,18 @@
     <div class="chat-footer-container">
       <mat-icon>message</mat-icon>
       <mat-form-field class="chat-input">
-        <input matInput 
+       <!--  <input matInput 
                #inputMessage 
                maxlength="140" 
                placeholder="Type your message" 
                [(ngModel)]="messageContent" 
-               (keyup.enter)="sendMessage(messageContent)">
+               (keyup.enter)="sendMessage(messageContent)"> -->
+               <input matInput 
+               #inputMessage 
+               maxlength="140" 
+               placeholder="Type your message" 
+               [(ngModel)]="messageContent" 
+              >
         <mat-hint align="end">{{inputMessage.value.length}}/140</mat-hint>
       </mat-form-field>
     </div>

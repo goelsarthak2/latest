@@ -17,19 +17,18 @@ export class AppComponent implements OnInit {
   selectedEmployeeCountRadioButton: string = 'All';
   ngOnInit(): void {  
     clearStorage();
-    this.showLogout = this.dataService.getFormData().loggedIn == false;
+    this.showLogout = this.dataService.getFormData().loggedIn == true;
   }
 
  constructor(private dataService: DataService, private router: Router) {
   this.subscription = this.dataService.getData().subscribe(x => {
-    debugger;
     this.showLogout = x; 
   });
     }
 
     Logout(){   
-      debugger;
       this.dataService.resetFormData();
+      this.dataService.sendData(false);
       this.router.navigate(['/login']);      
     } 
 
