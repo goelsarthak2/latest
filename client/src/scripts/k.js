@@ -99,8 +99,7 @@ let removeUser = function(name)
 
 let kandy = createKandy( config );
 
- kandy.on('auth:change', function() { 
-     debugger;    
+ kandy.on('auth:change', function() {     
     connectStatus = kandy.getConnection().isConnected;  
     window['LoginComponent'].zone.run(() => {
         window['LoginComponent'].component.loginFromOutside(connectStatus); 
@@ -170,7 +169,7 @@ var makeCall = function (name) {
   //  let callee = document.getElementById('callee').value;
   let callee = name;
    // let withVideo = document.getElementById('make-with-video').checked;
-   let withVideo = false;
+   let withVideo = true;
     // Gather media containers to be used for the call.
     let remoteContainer = document.getElementById('vremote');
     let localContainer = document.getElementById('vlocal');
@@ -192,7 +191,7 @@ let answerCall =function() {
     debugger;
     // Gather call options.
    // let withVideo = document.getElementById('answer-with-video').checked;
-   let withVideo = false;
+   let withVideo = true;
     // Gather media containers to be used for the call.
     let remoteContainer = document.getElementById('vremote');
     let localContainer = document.getElementById('vlocal');

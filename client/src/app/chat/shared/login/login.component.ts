@@ -25,8 +25,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {      
   }
 
-   login() {  
-     debugger;  
+   login() {    
       kandy.connect({
       username: this.user.trim()+"@trials.com",
       password: this.pass
@@ -49,7 +48,7 @@ export class LoginComponent implements OnInit {
 }
 loginFromOutside(connectStatus : boolean)
 {
- debugger;
+ 
   if(connectStatus == true)     
   {
     this.dataService.setUser({
